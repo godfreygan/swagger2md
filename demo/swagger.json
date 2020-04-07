@@ -1,0 +1,165 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "接口",
+    "description": "",
+    "termsOfService": "http://swagger.io/terms/",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/rpc.php": {
+      "post": {
+        "tags": [
+          "demo"
+        ],
+        "summary": "测试接口",
+        "description": "\n    开发者：张三",
+        "operationId": "demo_test",
+        "requestBody": {
+          "description": "Input data format",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/request_rpc_common_param"
+                  },
+                  {
+                    "properties": {
+                      "params": {
+                        "type": "array",
+                        "items": {
+                          "items": {
+                            "$ref": "#/components/schemas/demo_test_request"
+                          }
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "method": {
+                        "type": "string",
+                        "example": "demo.test"
+                      }
+                    },
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/apiprotocol"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "demo_test_request": {
+        "required": [
+          "ono",
+          "user_id,group_id,status,group_time"
+        ],
+        "properties": {
+          "ono": {
+            "description": "订单号",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户id",
+            "type": "string"
+          },
+          "group_id": {
+            "description": "团id",
+            "type": "string"
+          },
+          "status": {
+            "description": "拼团状态0:失败,1:成功",
+            "type": "string"
+          },
+          "group_time": {
+            "description": "拼团结果时间",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "request_rpc_common_param": {
+        "required": [
+          "jsonrpc",
+          "method",
+          "params",
+          "id"
+        ],
+        "properties": {
+          "jsonrpc": {
+            "description": "指定JSON-RPC协议版本的字符串",
+            "type": "string",
+            "default": "2.0",
+            "example": "2.0"
+          },
+          "method": {
+            "description": "调用方法名称的字符串",
+            "type": "string",
+            "default": "目录\\\\文件名.方法名",
+            "example": "目录\\\\文件名.方法名"
+          },
+          "params": {
+            "description": "params",
+            "type": "object"
+          },
+          "id": {
+            "description": "客户端的唯一标识id",
+            "type": "string",
+            "default": "SFGNGW-0343SD-GEQSOS-544",
+            "example": "SFGNGW-0343SD-GEQSOS-544"
+          }
+        },
+        "type": "object"
+      },
+      "apiprotocol": {
+        "required": [
+          "code",
+          "msg",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "demo",
+      "description": "测试相关接口"
+    }
+    ]
+}

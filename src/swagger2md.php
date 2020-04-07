@@ -20,6 +20,7 @@ $s2mObj->saveMdFile('v1_activity_lottery_getUserLotteryDrawNum');
 class Swagger2Md
 {
 
+    protected $base_path      = __DIR__;              // 当前文件路径
     protected $file_path      = '';                   // swagger-json文件路径
     protected $request_host   = '';                   // 接口请求的地址，如：http://order.ganqixin.dev.tgs.com/rpc.php
     protected $md_dir_path    = 'docs';               // 用于保存md文件的目录地址
@@ -58,7 +59,9 @@ class Swagger2Md
             foreach ($props as $key => $val) {
                 $this->$key = $val;
             }
+//            if($this->isEmpty($props['md_tpl_path'])) $this->md_tpl_path = $this->base_path .'/'. $this->md_tpl_path;
         }
+
         return TRUE;
     }
 
@@ -77,7 +80,7 @@ class Swagger2Md
                 $this->swagger_data = json_decode($jsonContent, TRUE);
             }
         } else {
-            self::output(1001, '文件路径不能为空', ['file_path' => $this->file_path]);
+            self::output(1001, '文件路径不能为空', ['file_path' => __DIR__ .'/'. $this->file_path]);
             exit();
         }
     }
@@ -772,10 +775,3 @@ SUMMARY;
         }
     }
 }
-
-$cfg    = ['file_path' => '../order-service_order.yml', 'request_host' => 'http://order.ganqixin.dev.tgs.com', 'md_dir_path' => 'docs', 'md_tpl_path' => '../tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$cfg    = ['file_path' => '../mobile-api_mobile.yml', 'request_host' => 'http://order.ganqixin.dev.tgs.com', 'md_dir_path' => 'docs', 'md_tpl_path' => '../tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$cfg    = ['file_path' => '../order-service_order_api.yml', 'request_host' => 'http://order.ganqixin.dev.tgs.com', 'md_dir_path' => 'docs', 'md_tpl_path' => 'tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$cfg    = ['file_path' => '../order-service_order_manage.yml', 'request_host' => 'http://order.ganqixin.dev.tgs.com', 'md_dir_path' => 'docs', 'md_tpl_path' => 'tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$s2mObj = new Swagger2Md($cfg);
-$s2mObj->transformation();
