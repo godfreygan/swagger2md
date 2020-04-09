@@ -307,10 +307,10 @@ class Swagger2Md
     {
         foreach ($keys as $key) {
             if (isset($data[$key])) {
-                return $data[$key];
+                return $data['field_type'] == ['integer'] ? (int)$data[$key] : $data[$key];
             }
         }
-        return $default;
+        return $data['field_type'] == ['integer'] ? (int)$default : $default;
     }
 
     /**
@@ -708,8 +708,8 @@ REQUEST;
             }
         }
 
-        $requestJsonInfo  = json_encode($this->params2Array($interfaceInfo['request_params']), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $responseJsonInfo = json_encode($this->params2Array($interfaceInfo['response_params']), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $requestJsonInfo  = json_encode($this->params2Array($interfaceInfo['request_params']), JSON_PRETTY_PRINT);
+        $responseJsonInfo = json_encode($this->params2Array($interfaceInfo['response_params']), JSON_PRETTY_PRINT);
 
         if(! file_exists($this->md_tpl_path)){
             self::output(1000, '无效的文件路径：', $this->md_tpl_path);
