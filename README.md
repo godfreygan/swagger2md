@@ -16,7 +16,7 @@ $path = __DIR__;
 require(__DIR__ ."/swagger2md.php");
 // 实际参数根据自己情况来配
 $cfg    = ['file_path' => 'swagger.json', 'request_host' => 'http://godfrey.cloud.com', 'md_dir_path' => 'docs', 'md_tpl_path' => 'tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$s2mObj = new Swagger2Md($cfg);
+$s2mObj = new Tools\Swagger2Md($cfg);
 $s2mObj->transformation();
 ?>
 ```

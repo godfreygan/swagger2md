@@ -1,4 +1,7 @@
 <?php
+
+namespace Tools;
+
 /**
  * Class Swagger2Md
  * @author          godfrey.gan <g854787652@gmail.com>
@@ -6,13 +9,13 @@
  */
 /*
 示例1：一键转化全部
-$cfg    = ['file_path' => '../order-service_order.json', 'request_host' => 'http://order.ganqixin.dev.tgs.com', 'md_dir_path' => 'docs', 'md_tpl_path' => '../tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$s2mObj = new Swagger2Md($cfg);
+$cfg    = ['file_path' => __DIR__ .'/swagger.json', 'request_host' => 'http://godfrey.cloud.com', 'md_dir_path' => 'md/docs', 'md_tpl_path' => __DIR__ .'/tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'md/SUMMARY.md'];
+$s2mObj = new Tools\Swagger2Md($cfg);
 $s2mObj->transformation();
 
 示例2：针对某一个operationId进行转换
-$cfg    = ['file_path' => '../order-service_order.json', 'request_host' => 'http://order.ganqixin.dev.tgs.com', 'md_dir_path' => 'docs', 'md_tpl_path' => '../tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'SUMMARY.md'];
-$s2mObj = new Swagger2Md($cfg);
+$cfg    = ['file_path' => __DIR__ .'/swagger.json', 'request_host' => 'http://godfrey.cloud.com', 'md_dir_path' => 'md/docs', 'md_tpl_path' => __DIR__ .'/tpl.md', 'is_create_menu' => TRUE, 'menu_file_name' => 'md/SUMMARY.md'];
+$s2mObj = new Tools\Swagger2Md($cfg);
 $s2mObj->getInterfaceInfo('v1_activity_lottery_getUserLotteryDrawNum');
 $s2mObj->saveMdFile('v1_activity_lottery_getUserLotteryDrawNum');
  */
@@ -22,7 +25,7 @@ class Swagger2Md
 
     protected $base_path      = __DIR__;              // 当前文件路径
     protected $file_path      = '';                   // swagger-json文件路径
-    protected $request_host   = '';                   // 接口请求的地址，如：http://order.ganqixin.dev.tgs.com/rpc.php
+    protected $request_host   = '';                   // 接口请求的地址，如：http://godfrey.cloud.com
     protected $md_dir_path    = 'docs';               // 用于保存md文件的目录地址
     protected $md_tpl_path    = 'tpl.md';             // md样本文件的地址
     protected $swagger_data   = [];                   // swagger-json的数组

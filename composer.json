@@ -1,0 +1,15 @@
+{
+  "name": "godfreygan/swagger2md",
+  "description": "The tool of swagger transform markdown file.",
+  "license": "MIT",
+  "homepage": "http://dazhairen.com",
+  "authors": [
+    {
+      "name": "godfrey.gan",
+      "email": "g854787652@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  }
+}
