@@ -208,12 +208,16 @@ class Swagger2Md
                                     }
                                 }
                             } else if(! $this->isEmpty($v1['items'], 'type')) {
-                                $tmpDefault = $this->arrayGet($v1['items'], ['default'], 0);
-                                $tmpDefault = $v1['items']['type']=='integer' ? (int)$tmpDefault : $tmpDefault;
-                                $tmpExample = $this->arrayGet($v1['items'], ['example', 'default'], 0);
-                                $tmpExample = $v1['items']['type']=='integer' ? (int)$tmpExample : $tmpExample;
-                                $data[$k1]['default'] = [$tmpDefault];
-                                $data[$k1]['example'] = [$tmpExample];
+                                if(isset($v1['items']['default'])){
+                                    $tmpDefault = $this->arrayGet($v1['items'], ['default']);
+                                    $tmpDefault = $v1['items']['type']=='integer' ? (int)$tmpDefault : $tmpDefault;
+                                    $data[$k1]['default'] = [$tmpDefault];
+                                }
+                                if(isset($v1['items']['example'])){
+                                    $tmpExample = $this->arrayGet($v1['items'], ['example', 'default']);
+                                    $tmpExample = $v1['items']['type']=='integer' ? (int)$tmpExample : $tmpExample;
+                                    $data[$k1]['example'] = [$tmpExample];
+                                }
                             }
                         } else if (! $this->isEmpty($v1, 'properties')) {
                             $data[$k1] = $this->formatField($v1, $k1, $required);
@@ -274,9 +278,9 @@ class Swagger2Md
     public function formatField($propertie, $fieldName, $required = [])
     {
         $fieldType   = empty($propertie['type']) ? 'string' : $propertie['type'];
-        $default     = empty($propertie['default']) ? '' : (is_array($propertie['default']) ? json_encode($propertie['default']) : $propertie['default']);
+        $default     = empty($propertie['default']) ? '' : (is_array($propertie['default']) ? json_encode($propertie['default'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : $propertie['default']);
         $default     = $fieldType == 'integer' ? (int)$default : $default;
-        $example     = empty($propertie['example']) ? '' : (is_array($propertie['example']) ? json_encode($propertie['example']) : $propertie['example']);
+        $example     = empty($propertie['example']) ? '' : (is_array($propertie['example']) ? json_encode($propertie['example'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : $propertie['example']);
         $example     = $fieldType == 'integer' ? (int)$example : $example;
         $description = empty($propertie['description']) ? '' : str_replace(array("/r/n", "/r", "/n", "\r\n", "\r", "\n"), "", $propertie['description']);
         return [
@@ -536,8 +540,8 @@ class Swagger2Md
         $fileName    = isset($v1['filed_name']) ? $v1['filed_name'] : '';
         $fieldType   = isset($v1['field_type']) ? $v1['field_type'] : '';
         $required    = empty($v1['required']) ? '否' : '是';
-        $default     = isset($v1['default']) ? is_array($v1['default'])?json_encode($v1['default']):$v1['default'] : '';
-        $example     = isset($v1['example']) ? is_array($v1['example'])?json_encode($v1['example']):$v1['example'] : '';
+        $default     = isset($v1['default']) ? is_array($v1['default'])?json_encode($v1['default'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE):$v1['default'] : '';
+        $example     = isset($v1['example']) ? is_array($v1['example'])?json_encode($v1['example'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE):$v1['example'] : '';
         $description = isset($v1['description']) ? $v1['description'] : '';
         if (empty($fieldType) && $fileName == 'params') {
             $fieldType = 'array';
@@ -556,8 +560,8 @@ class Swagger2Md
         $fileName    = isset($v1['filed_name']) ? $v1['filed_name'] : '';
         $fieldType   = isset($v1['field_type']) ? $v1['field_type'] : '';
         $required    = empty($v1['required']) ? '否' : '是';
-        $default     = isset($v1['default']) ? is_array($v1['default'])?json_encode($v1['default']):$v1['default'] : '';
-        $example     = isset($v1['example']) ? is_array($v1['example'])?json_encode($v1['example']):$v1['example'] : '';
+        $default     = isset($v1['default']) ? is_array($v1['default'])?json_encode($v1['default'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE):$v1['default'] : '';
+        $example     = isset($v1['example']) ? is_array($v1['example'])?json_encode($v1['example'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE):$v1['example'] : '';
         $description = isset($v1['description']) ? $v1['description'] : '';
         return $fileName . ' | ' . $fieldType . ' | ' . $required . ' | ' . $default . ' | ' . $example . ' | ' . $description;
     }
@@ -718,8 +722,8 @@ REQUEST;
             }
         }
 
-        $requestJsonInfo  = json_encode($this->params2Array($interfaceInfo['request_params']), JSON_PRETTY_PRINT);
-        $responseJsonInfo = json_encode($this->params2Array($interfaceInfo['response_params']), JSON_PRETTY_PRINT);
+        $requestJsonInfo  = json_encode($this->params2Array($interfaceInfo['request_params']), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        $responseJsonInfo = json_encode($this->params2Array($interfaceInfo['response_params']), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
         if(! file_exists($this->md_tpl_path)){
             self::output(1000, '无效的文件路径：', $this->md_tpl_path);
