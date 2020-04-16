@@ -207,6 +207,13 @@ class Swagger2Md
                                         $data[$k1]['field_items'] = $childSchemasData;
                                     }
                                 }
+                            } else if(! $this->isEmpty($v1['items'], 'type')) {
+                                $tmpDefault = $this->arrayGet($v1['items'], ['default'], 0);
+                                $tmpDefault = $v1['items']['type']=='integer' ? (int)$tmpDefault : $tmpDefault;
+                                $tmpExample = $this->arrayGet($v1['items'], ['example', 'default'], 0);
+                                $tmpExample = $v1['items']['type']=='integer' ? (int)$tmpExample : $tmpExample;
+                                $data[$k1]['default'] = [$tmpDefault];
+                                $data[$k1]['example'] = [$tmpExample];
                             }
                         } else if (! $this->isEmpty($v1, 'properties')) {
                             $data[$k1] = $this->formatField($v1, $k1, $required);
@@ -298,22 +305,22 @@ class Swagger2Md
     }
 
     /**
-     * @title : 获取数组元素
-     * @param string $v1
-     * @param string $k1
-     * @param string $k2
-     * @param string $default
-     * @return mixed|string
+     * @title: 获取数组元素
      * @author: godfrey.gan <g854787652@gmail.com>
+     * @param $data
+     * @param $keys
+     * @param string $default
+     * @return int|mixed|string
      */
     private function arrayGet($data, $keys, $default = '')
     {
+        $isInteger = (!$this->isEmpty($data, 'field_type') && $data['field_type'] == 'integer');
         foreach ($keys as $key) {
             if (isset($data[$key])) {
-                return $data['field_type'] == ['integer'] ? (int)$data[$key] : $data[$key];
+                return $isInteger ? (int)$data[$key] : $data[$key];
             }
         }
-        return $data['field_type'] == ['integer'] ? (int)$default : $default;
+        return $isInteger ? (int)$default : $default;
     }
 
     /**
@@ -529,8 +536,8 @@ class Swagger2Md
         $fileName    = isset($v1['filed_name']) ? $v1['filed_name'] : '';
         $fieldType   = isset($v1['field_type']) ? $v1['field_type'] : '';
         $required    = empty($v1['required']) ? '否' : '是';
-        $default     = isset($v1['default']) ? $v1['default'] : '';
-        $example     = isset($v1['example']) ? $v1['example'] : '';
+        $default     = isset($v1['default']) ? is_array($v1['default'])?json_encode($v1['default']):$v1['default'] : '';
+        $example     = isset($v1['example']) ? is_array($v1['example'])?json_encode($v1['example']):$v1['example'] : '';
         $description = isset($v1['description']) ? $v1['description'] : '';
         if (empty($fieldType) && $fileName == 'params') {
             $fieldType = 'array';
@@ -549,8 +556,8 @@ class Swagger2Md
         $fileName    = isset($v1['filed_name']) ? $v1['filed_name'] : '';
         $fieldType   = isset($v1['field_type']) ? $v1['field_type'] : '';
         $required    = empty($v1['required']) ? '否' : '是';
-        $default     = isset($v1['default']) ? $v1['default'] : '';
-        $example     = isset($v1['example']) ? $v1['example'] : '';
+        $default     = isset($v1['default']) ? is_array($v1['default'])?json_encode($v1['default']):$v1['default'] : '';
+        $example     = isset($v1['example']) ? is_array($v1['example'])?json_encode($v1['example']):$v1['example'] : '';
         $description = isset($v1['description']) ? $v1['description'] : '';
         return $fileName . ' | ' . $fieldType . ' | ' . $required . ' | ' . $default . ' | ' . $example . ' | ' . $description;
     }
